@@ -5,3 +5,5 @@ set(SDKCONFIG_DEFAULTS
     boards/FRI3D_BADGE_COMMON/sdkconfig.partition
     boards/FRI3D_BADGE_2022/sdkconfig.board
 )
+
+set(MICROPY_FROZEN_MANIFEST ${MICROPY_BOARD_DIR}/manifest.py)
