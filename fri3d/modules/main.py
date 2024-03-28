@@ -1,6 +1,7 @@
 import time
 
-from fri3d.badge import badge
+from fonts.bitmap import vga1_16x16 as font
+from fri3d.badge import leds, display, colors
 
 
 def demo(np):
@@ -42,5 +43,34 @@ def demo(np):
 
 
 print("Boot complete, starting application")
-for _ in range(3):
-    demo(badge.neopixels)
+demo(leds)
+
+sleeptime = 0.5
+
+display.fill(colors.RED)
+time.sleep(sleeptime)
+
+display.fill(colors.GREEN)
+time.sleep(sleeptime)
+
+display.fill(colors.BLUE)
+time.sleep(sleeptime)
+
+display.fill(colors.YELLOW)
+time.sleep(sleeptime)
+
+display.fill(colors.BLACK)
+time.sleep(sleeptime)
+
+
+def center(text):
+    length = 1 if isinstance(text, int) else len(text)
+    display.text(
+        font,
+        text,
+        display.width() // 2 - length // 2 * font.WIDTH,
+        display.height() // 2 - font.HEIGHT // 2,
+    )
+
+
+center("REPL")

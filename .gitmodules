@@ -59,3 +59,6 @@
 [submodule "lib/protobuf-c"]
 	path = lib/protobuf-c
 	url = https://github.com/protobuf-c/protobuf-c.git
+[submodule "fri3d/st7789_mpy"]
+	path = fri3d/st7789_mpy
+	url = https://github.com/russhughes/st7789_mpy.git

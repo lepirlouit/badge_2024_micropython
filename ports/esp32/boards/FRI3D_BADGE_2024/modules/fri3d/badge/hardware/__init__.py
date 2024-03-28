@@ -1,14 +1,4 @@
-from . import pinout
-
-
-class Hardware:
-    class NeoPixels:
-        def __init__(self):
-            self.pin = pinout.neopixels
-            self.amount = 5
-
-    def __init__(self):
-        self.neopixels = self.NeoPixels()
-
-
-hardware = Hardware()
+from .pinout import hardware_pinout
+from .leds import hardware_leds
+from .spi import hardware_spi
+from .display import hardware_display
