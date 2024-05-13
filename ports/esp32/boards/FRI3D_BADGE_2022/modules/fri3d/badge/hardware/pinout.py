@@ -14,9 +14,9 @@ class HardwarePinout:
 
     class PinoutDisplay:
         def __init__(self):
-            self.pin_rst = Pin(32, Pin.OUT)
-            self.pin_dc = Pin(33, Pin.OUT)
-            self.pin_cs = Pin(5, Pin.OUT)
+            self.pin_rst = 32
+            self.pin_dc = 33
+            self.pin_cs = 5
 
     def __init__(self):
         self.pinout_leds = self.PinoutLEDS()

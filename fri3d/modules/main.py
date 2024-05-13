@@ -1,7 +1,8 @@
 import time
+import lvgl_esp32
+import lvgl as lv
 
-from fonts.bitmap import vga1_16x16 as font
-from fri3d.badge import leds, display, colors
+from fri3d.badge import leds, display
 
 
 def demo(np):
@@ -45,32 +46,29 @@ def demo(np):
 print("Boot complete, starting application")
 demo(leds)
 
-sleeptime = 0.5
+wrapper = lvgl_esp32.Wrapper(display)
+wrapper.init()
 
-display.fill(colors.RED)
-time.sleep(sleeptime)
+screen = lv.screen_active()
+screen.set_style_bg_color(lv.color_hex(0x003a57), lv.PART.MAIN)
 
-display.fill(colors.GREEN)
-time.sleep(sleeptime)
+label = lv.label(screen)
+label.set_text("Hello world from MicroPython")
+label.set_style_text_color(lv.color_hex(0xffffff), lv.PART.MAIN)
+label.align(lv.ALIGN.CENTER, 0, 0)
 
-display.fill(colors.BLUE)
-time.sleep(sleeptime)
+a = lv.anim_t()
+a.init()
+a.set_var(label)
+a.set_values(10, 50)
+a.set_duration(1000)
+a.set_playback_delay(100)
+a.set_playback_duration(300)
+a.set_repeat_delay(500)
+a.set_repeat_count(lv.ANIM_REPEAT_INFINITE)
+a.set_path_cb(lv.anim_t.path_ease_in_out)
+a.set_custom_exec_cb(lambda _, v: label.set_y(v))
+a.start()
 
-display.fill(colors.YELLOW)
-time.sleep(sleeptime)
-
-display.fill(colors.BLACK)
-time.sleep(sleeptime)
-
-
-def center(text):
-    length = 1 if isinstance(text, int) else len(text)
-    display.text(
-        font,
-        text,
-        display.width() // 2 - length // 2 * font.WIDTH,
-        display.height() // 2 - font.HEIGHT // 2,
-    )
-
-
-center("REPL")
+while True:
+    lv.timer_handler_run_in_period(5)
