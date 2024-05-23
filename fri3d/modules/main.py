@@ -87,11 +87,5 @@ else:
     a.set_custom_exec_cb(lambda _, v: label.set_y(v))
     a.start()
 
-
-    indev_drv = lv.indev_create()
-    indev_drv.set_read_cb(self._read)
-    indev_drv.set_display(dispplay)
-    indev_drv.enable(True)
-
     while True:
         lv.timer_handler_run_in_period(5)
