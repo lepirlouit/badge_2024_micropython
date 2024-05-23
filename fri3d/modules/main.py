@@ -5,7 +5,7 @@ import lvgl as lv
 
 from fri3d.badge.hardware import hardware_pinout
 from fri3d.badge import leds, display
-
+from fri3d.buttons_indev import read_buttons
 
 def demo(np):
     n = np.n
@@ -49,6 +49,11 @@ def demo(np):
 wrapper = lvgl_esp32.Wrapper(display)
 wrapper.init()
 
+indev_drv = lv.indev_create()
+indev_drv.set_read_cb(read_buttons)
+indev_drv.set_display(display)
+indev_drv.enable(True)
+
 # We check some inputs at boot to see if we need to boot in a special mode
 repl_pin = machine.Pin(hardware_pinout.pinout_sao.gpio2, machine.Pin.IN, machine.Pin.PULL_UP)
 
@@ -57,6 +62,7 @@ if repl_pin.value() == 0:
     print("Detected REPL pin active, dropping into REPL")
 
 else:
+
     print("Boot complete, starting application")
     demo(leds)
 
@@ -80,6 +86,12 @@ else:
     a.set_path_cb(lv.anim_t.path_ease_in_out)
     a.set_custom_exec_cb(lambda _, v: label.set_y(v))
     a.start()
+
+
+    indev_drv = lv.indev_create()
+    indev_drv.set_read_cb(self._read)
+    indev_drv.set_display(dispplay)
+    indev_drv.enable(True)
 
     while True:
         lv.timer_handler_run_in_period(5)
