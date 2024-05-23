@@ -62,7 +62,6 @@ if repl_pin.value() == 0:
     print("Detected REPL pin active, dropping into REPL")
 
 else:
-
     print("Boot complete, starting application")
     demo(leds)
 
