@@ -105,7 +105,7 @@ else:
     lbl.set_text("click left")
 
     btn2 = lv.button(screen)
-    btn2.align(lv.ALIGN.CENTER, 40, -40)
+    btn2.align(lv.ALIGN.CENTER, 80, -40)
     btn2.add_event_cb(click_cb, lv.EVENT.ALL, None)
     lbl2 = lv.label(btn2)
     lbl2.set_text("click right")
