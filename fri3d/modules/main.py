@@ -6,6 +6,9 @@ import lvgl as lv
 from fri3d.badge.hardware import hardware_pinout
 from fri3d.badge import leds, display
 from fri3d.buttons_indev import read_buttons
+from fri3d import logging
+
+log = logging.Log(__name__, level=logging.DEBUG)
 
 def demo(np):
     n = np.n
@@ -50,8 +53,12 @@ wrapper = lvgl_esp32.Wrapper(display)
 wrapper.init()
 
 indev_drv = lv.indev_create()
+indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
 indev_drv.set_read_cb(read_buttons)
-indev_drv.set_display(display)
+indev_drv.set_display(lv.display_get_default())
+grp = lv.group_create()
+grp.set_default()
+indev_drv.set_group(grp)
 indev_drv.enable(True)
 
 # We check some inputs at boot to see if we need to boot in a special mode
@@ -85,6 +92,24 @@ else:
     a.set_path_cb(lv.anim_t.path_ease_in_out)
     a.set_custom_exec_cb(lambda _, v: label.set_y(v))
     a.start()
+    
+    def click_cb(event):
+        code = event.get_code()
+        if code == lv.EVENT.CLICKED:
+            log.debug("clicked")
+
+    btn = lv.button(screen)
+    btn.align(lv.ALIGN.CENTER, -80, -40)
+    btn.add_event_cb(click_cb, lv.EVENT.ALL, None)
+    lbl = lv.label(btn)
+    lbl.set_text("click left")
+
+    btn2 = lv.button(screen)
+    btn2.align(lv.ALIGN.CENTER, 40, -40)
+    btn2.add_event_cb(click_cb, lv.EVENT.ALL, None)
+    lbl2 = lv.label(btn2)
+    lbl2.set_text("click right")
+
 
     while True:
         lv.timer_handler_run_in_period(5)

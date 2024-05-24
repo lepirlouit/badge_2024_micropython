@@ -2,6 +2,7 @@ from machine import Pin, ADC
 from micropython import const
 import micropython
 import time
+import lvgl as lv
 
 from fri3d import logging
 
@@ -139,10 +140,10 @@ class DebouncedButton:
                 self._state = 0
 
 
-joy_x = JoyStick(JOY_X, dead_val=100)
+joy_x = JoyStick(JOY_X, dead_val=150)
 joy_x.init()
 
-joy_y = JoyStick(JOY_Y, dead_val=100)
+joy_y = JoyStick(JOY_Y, dead_val=150)
 joy_y.init()
 
 
@@ -154,10 +155,10 @@ but_Y = DebouncedButton(Pin(BUTTON_Y_PIN, Pin.IN, Pin.PULL_UP))
 but_MENU = DebouncedButton(Pin(BUTTON_MENU_PIN, Pin.IN, Pin.PULL_UP))
 but_START = DebouncedButton(Pin(BUTTON_START_PIN, Pin.IN))  # has external pullup
 
+# remember the last key pressed reported to lvgl
+last_key_pressed = None
 
-
-def read_buttons():
-    data = []
+def read_buttons(drv, data):
     """
     X: LV_KEY_NEXT
     Y: LV_KEY_PREV
@@ -172,39 +173,68 @@ def read_buttons():
     JOY_LEFT: LV_KEY_LEFT
     JOY_RIGHT: LV_KEY_RIGHT
     """
+    global last_key_pressed
+
+    keys_pressed = []
+
     if but_A.value():
-        data.append("LV_KEY_ENTER")
+        keys_pressed.append(lv.KEY.ENTER)
     if but_B.value():
-        data.append("LV_KEY_ESC")
+        keys_pressed.append(lv.KEY.ESC)
     if but_X.value():
-        data.append("LV_KEY_NEXT")
+        keys_pressed.append(lv.KEY.NEXT)
     if but_Y.value():
-        data.append("LV_KEY_PREV")
+        keys_pressed.append(lv.KEY.PREV)
     if but_MENU.value():
-        data.append("LV_KEY_HOME")
+        keys_pressed.append(lv.KEY.HOME)
     if but_START.value():
-        data.append("LV_KEY_END")
+        keys_pressed.append(lv.KEY.END)
 
     j_x = joy_x.read()
     if j_x > 0:
-        data.append("LV_KEY_RIGHT")
+        keys_pressed.append(lv.KEY.RIGHT)
     if j_x < 0:
-        data.append("LV_KEY_LEFT")
+        keys_pressed.append(lv.KEY.LEFT)
 
     j_y = joy_y.read()
     if j_y > 0:
-        data.append("LV_KEY_UP")
+        keys_pressed.append(lv.KEY.UP)
     if j_y < 0:
-        data.append("LV_KEY_DOWN")
+        keys_pressed.append(lv.KEY.DOWN)
 
+    if last_key_pressed is not None:
+        if last_key_pressed not in keys_pressed:
+            # last key released
+            # log.debug(f"released {last_key_pressed}")
 
+            data.key = last_key_pressed
+            data.state = lv.INDEV_STATE.RELEASED
+            last_key_pressed = None
 
-    # if data is empty, return None
-    if data:
-        data = ",".join(data)
+            if keys_pressed:
+                # another key is pressed
+                data.continue_reading = True
+            else:
+                data.continue_reading = False
+        else:
+            # last key still pressed
+            data.key = last_key_pressed
+            data.state = lv.INDEV_STATE.PRESSED
+            data.continue_reading = False
     else:
-        data = None
-    return data
+        if keys_pressed:
+            # can only send 1 key pressed to lvgl, send first
+            key_pressed = keys_pressed.pop(0)
+ 
+            # log.debug(f"pressed {key_pressed}")
+
+            data.key = key_pressed
+            data.state = lv.INDEV_STATE.PRESSED
+            data.continue_reading = False
+
+            last_key_pressed = key_pressed
+
+
 
 
 
