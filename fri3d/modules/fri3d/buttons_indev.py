@@ -47,10 +47,7 @@ elif 'select' in buttons:
 if 'start' in buttons:
     button_end = buttons['start']
 
-if 'x' in joystick and 'y' in joystick:
-    analog_joystick = True
-else:
-    analog_joystick = False
+analog_joystick = True if 'x' in joystick and 'y' in joystick else False
 
 # remember the last key pressed reported to lvgl
 last_key_pressed = None
