@@ -10,7 +10,7 @@ class JoystickAxis:
     """
     def __init__(self, pin_nr: int, dead_val=5, center=1650):
         self._pin_nr = pin_nr
-        self._dead_val = dead_val
+        self.dead_val = dead_val
         self._center = center
     
     def init(self):
@@ -41,6 +41,6 @@ class JoystickAxis:
         uv_val = self._adc.read_uv()  # read_uv() uses the known characteristics of the ADC and per-package eFuse values
         uv_val = uv_val // 1000
         uv_val = uv_val - self._center
-        if -self._dead_val < uv_val and uv_val < self._dead_val:
+        if -self.dead_val < uv_val and uv_val < self.dead_val:
             uv_val = 0
         return uv_val
