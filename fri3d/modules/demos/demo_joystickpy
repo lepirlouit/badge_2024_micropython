@@ -17,8 +17,7 @@ if __name__ == "__main__":
         print(f"{j_x=}, {j_y=}")
 
 
-    # calibrate analog joystick
-    if analog_joystick:
+        # calibrate analog joystick
         print("CALIBRATION: center the joystick, and do not touch it")
         time.sleep(1)
 
@@ -32,8 +31,7 @@ if __name__ == "__main__":
         j_y = joystick['y'].read()
         print(f"{j_x=}, {j_y=}")
 
-    # increase analog joystick dead_val
-    if analog_joystick:
+        # increase analog joystick dead_val
         print("increase analog joystick dead_val")
         joystick['x'].dead_val = 300
         joystick['y'].dead_val = 300
@@ -41,8 +39,7 @@ if __name__ == "__main__":
         j_y = joystick['y'].read()
         print(f"{j_x=}, {j_y=}")
 
-
-    if analog_joystick:
+        # detect RIGHT, LEFT, UP, DOWN
         print("detect RIGHT, LEFT, UP, DOWN")
         directions = []
         j_x = joystick['x'].read()
@@ -60,23 +57,21 @@ if __name__ == "__main__":
         print(f"{directions=}")
 
 
+        print("detect 10 joystick changes")
+        prev_values = None
+        changes = 0
+        while changes < 10:
 
-    print("detect 10 joystick changes")
-    prev_values = None
-    changes = 0
-    while changes < 10:
+            values = {}
 
-        values = {}
-
-        if analog_joystick:
             values['j_x'] = joystick['x'].read()
             values['j_y'] = joystick['y'].read()
 
-        print(f"{values}")
-        time.sleep(0.1)
+            print(f"{values}")
+            time.sleep(0.1)
 
-        if values != prev_values:
-            changes += 1
-            prev_values = values
+            if values != prev_values:
+                changes += 1
+                prev_values = values
 
 
