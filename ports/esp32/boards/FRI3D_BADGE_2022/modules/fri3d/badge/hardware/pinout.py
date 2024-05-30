@@ -21,7 +21,9 @@ class HardwarePinout:
 
     class PinoutButtons:
         def __init__(self):
-            self.pin_button_boot = Pin(0, Pin.IN)   # has external pullup
+            self.pin_buttons = {
+                'boot': Pin(0, Pin.IN)   # has external pullup
+            }
 
     class PinoutSAO:
         def __init__(self, leds: PinoutLEDS):
@@ -30,16 +32,18 @@ class HardwarePinout:
 
     class PinoutGameon:
         def __init__(self):
-            self.pin_button_a = Pin(13, Pin.IN, Pin.PULL_UP)
-            self.pin_button_b = Pin(12, Pin.IN, Pin.PULL_UP)
-            self.pin_button_start = Pin(32, Pin.IN, Pin.PULL_UP)
-            self.pin_button_select = Pin(36, Pin.IN, Pin.PULL_UP)
-            self.pin_button_p0 = Pin(27, Pin.IN, Pin.PULL_UP)
-            self.pin_button_p1 = Pin(14, Pin.IN, Pin.PULL_UP)
-            self.pin_button_up = Pin(39, Pin.IN, Pin.PULL_UP)
-            self.pin_button_left = Pin(26, Pin.IN, Pin.PULL_UP)
-            self.pin_button_down = Pin(15, Pin.IN, Pin.PULL_UP)
-            self.pin_button_right = Pin(0, Pin.IN)   # has external pullup
+            self.pin_buttons = {
+                'a': Pin(13, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'start': Pin(32, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+                'b': Pin(12, Pin.IN, Pin.PULL_UP),
+            }            
 
     def __init__(self):
         self.pinout_leds = self.PinoutLEDS()
@@ -49,10 +53,4 @@ class HardwarePinout:
         self.pinout_sao = self.PinoutSAO(self.pinout_leds)
         self.pinout_gameon = self.PinoutGameon()
 
-
-class HardwareCapabilities:
-    def __init__(self):
-        self.has_gameon = True
-
 hardware_pinout = HardwarePinout()
-hardware_capabilities = HardwareCapabilities()

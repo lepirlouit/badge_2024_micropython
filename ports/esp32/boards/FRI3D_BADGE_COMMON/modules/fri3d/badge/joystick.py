@@ -1,8 +1,6 @@
-from fri3d.badge.hardware import hardware_capabilities
-
 joystick = {}
 
-if hasattr(hardware_capabilities, 'has_joystick') and hardware_capabilities.has_joystick:
+try:
     from fri3d.badge.hardware import hardware_joystick
 
     from .joystick_axis import JoystickAxis
@@ -12,3 +10,6 @@ if hasattr(hardware_capabilities, 'has_joystick') and hardware_capabilities.has_
 
     joystick['y'] = JoystickAxis(hardware_joystick.pinout.pin_joystick_y, dead_val=150)
     joystick['y'].init()
+
+except ImportError:
+    pass

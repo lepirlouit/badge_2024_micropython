@@ -26,12 +26,14 @@ class HardwarePinout:
 
     class PinoutButtons:
         def __init__(self):
-            self.pin_button_a = Pin(39, Pin.IN, Pin.PULL_UP)
-            self.pin_button_b = Pin(40, Pin.IN, Pin.PULL_UP)
-            self.pin_button_x = Pin(38, Pin.IN, Pin.PULL_UP)
-            self.pin_button_y = Pin(41, Pin.IN, Pin.PULL_UP)
-            self.pin_button_menu = Pin(45, Pin.IN, Pin.PULL_UP)
-            self.pin_button_start = Pin(0, Pin.IN)  # has external pullup
+            self.pin_buttons = {
+                'a': Pin(39, Pin.IN, Pin.PULL_UP),
+                'b': Pin(40, Pin.IN, Pin.PULL_UP),
+                'x': Pin(38, Pin.IN, Pin.PULL_UP),
+                'y': Pin(41, Pin.IN, Pin.PULL_UP),
+                'menu': Pin(45, Pin.IN, Pin.PULL_UP),
+                'start': Pin(0, Pin.IN)  # has external pullup
+            }
 
     class PinoutJoystick:
         def __init__(self):
@@ -52,4 +54,3 @@ class HardwareCapabilities:
         self.has_joystick = True
 
 hardware_pinout = HardwarePinout()
-hardware_capabilities = HardwareCapabilities()
