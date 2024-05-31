@@ -6,7 +6,6 @@
 #include "mphalport.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include "esp_heap_caps.h"
 
 #include "../include/nvs.h"
 
@@ -184,16 +183,24 @@ STATIC mp_obj_t mp_nvs_get(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw
         case NVS_TYPE_STR:
             size_t str_len;
             nvs_get_str(self->ns, key, NULL, &str_len);
-            char *str_value = (char *)heap_caps_malloc(str_len, 0);  // might be a memory leak, don't know if I need to free it after creating the str object
+            char *str_value = (char *)calloc(1, str_len);
+            if (str_value == NULL) {
+                mp_raise_msg(&mp_type_RuntimeError, MP_ERROR_TEXT("memory allocation failed"));
+            }
             err = nvs_get_str(self->ns, key, str_value, &str_len);
-            value = mp_obj_new_str(str_value, str_len);
+            value = mp_obj_new_str(str_value, str_len-1);
+            free(str_value);
             break;
         case NVS_TYPE_BLOB:
             size_t blob_len;
             nvs_get_blob(self->ns, key, NULL, &blob_len);
-            uint8_t *data = (uint8_t *)heap_caps_malloc(blob_len, 0);  // might be a memory leak, don't know if I need to free it after creating the bytes object
+            uint8_t *data = (uint8_t *)calloc(1, blob_len);
+            if (data == NULL) {
+                mp_raise_msg(&mp_type_RuntimeError, MP_ERROR_TEXT("memory allocation failed"));
+            }
             err = nvs_get_blob(self->ns, key, data, &blob_len);
             value = mp_obj_new_bytes(data, blob_len);
+            free(data);
             break;
         case NVS_TYPE_FLOAT:
             union {
