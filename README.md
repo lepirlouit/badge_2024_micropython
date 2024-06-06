@@ -41,6 +41,9 @@ As a quick reference, here is a short summary:
 * `make`
 * `make erase` if there was no MicroPython on the badge previously
 * `make deploy` to flash the badge
+* `BAUD=115200 make monitor` to connect to the serial interface (which adds automatic backtrace decoding)
+* `alias esp32-backtrace=xtensa-esp32-elf-addr2line -pfiaC -e build-${BOARD}/micropython.elf` creates an command alias for backtrace decoding
+  can be used like this `esp32-backtrace <paste the backtrace here>`
 
 Congratulations, you should now be able to connect to the Python prompt
 
