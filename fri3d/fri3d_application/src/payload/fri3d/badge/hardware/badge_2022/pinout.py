@@ -26,7 +26,7 @@ class HardwarePinout:
             }
 
     class PinoutSAO:
-        def __init__(self, leds: PinoutLEDS):
+        def __init__(self, leds):
             self.gpio1 = leds.pin
             self.gpio2 = const(13)
 
