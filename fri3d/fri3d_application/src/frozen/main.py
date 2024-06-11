@@ -6,7 +6,7 @@ from p0tat0.sys import dev_mode
 # If you connect GPIO2 of the SAO connector to the GND pin, the dev mode gets activated, and we automatically drop to
 # REPL
 #
-# This is easier than the Ctrl+A, Ctrl+D, Ctrl+B procedure and allows for faster deveolpment cycles: you can mount your
+# This is easier than the Ctrl+A, Ctrl+D, Ctrl+B procedure and allows for faster development cycles: you can mount your
 # local development scripts using `mpremote mount` and # perform any actions you like. On first execution of
 # `mpremote mount`, it will start in RAW REPL mode meaning this `main.py` does not get imported. On subsequent
 # soft-reboots (press Ctrl+D) it does automatically get run because the firmware stays in FRIENDLY REPL mode. If we
