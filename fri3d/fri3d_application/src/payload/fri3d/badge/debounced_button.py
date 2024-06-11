@@ -65,14 +65,14 @@ class DebouncedButton:
             if self._state == 0:
                 self._state = 1
                 self._start_ms = time.ticks_ms()
-                if not self.cb is None:
+                if self.cb is not None:
                     micropython.schedule(self.cb, self.arg)  # Schedule the function func to be executed “very soon”, outside irq
             else:
                 # double trigger, ignore
                 if self._deb_passed:
                     # we might have missed the up during debounce
                     self._start_ms = time.ticks_ms()
-                    if not self.cb is None:
+                    if self.cb is not None:
                         micropython.schedule(self.cb, self.arg)  # Schedule the function func to be executed “very soon”, outside irq
         else:
             # release
