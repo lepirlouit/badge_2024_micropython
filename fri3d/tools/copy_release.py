@@ -54,7 +54,7 @@ def main():
     print(f"{BUILD_DIR=}")
     print(f"{DEST_REPO=}")
 
-    version_file = os.path.join(PORT_DIR, 'boards/FRI3D_BADGE_COMMON/modules/fri3d/badge/__init__.py')
+    version_file = 'fri3d/fri3d_application/src/payload/fri3d/version.py'
     version = get_version_from_file(version_file)
     print(f"{version=}")
 
