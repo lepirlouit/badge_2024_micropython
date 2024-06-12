@@ -28,6 +28,17 @@ class Indev:
         
         self.assign_buttons()
 
+        indev_drv = lv.indev_create()
+        indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
+        indev_drv.set_read_cb(self.read_buttons)
+        indev_drv.set_display(lv.display_get_default())
+        self._grp = lv.group_create()
+        self._grp.set_default()
+        indev_drv.set_group(self._grp)
+        indev_drv.enable(True)
+
+        self._indev_drv = indev_drv
+
 
     def assign_buttons(self):
         if 'a' in buttons:
@@ -98,7 +109,7 @@ class Indev:
         if self.last_key_pressed is not None:
             if self.last_key_pressed not in keys_pressed:
                 # last key released
-                # logger.debug(f"released {last_key_pressed}")
+                logger.debug(f"released {self.last_key_pressed}")
 
                 data.key = self.last_key_pressed
                 data.state = lv.INDEV_STATE.RELEASED
@@ -119,7 +130,7 @@ class Indev:
                 # can only send 1 key pressed to lvgl, send first
                 key_pressed = keys_pressed.pop(0)
 
-                # logger.debug(f"pressed {key_pressed}")
+                logger.debug(f"pressed {key_pressed}")
 
                 data.key = key_pressed
                 data.state = lv.INDEV_STATE.PRESSED

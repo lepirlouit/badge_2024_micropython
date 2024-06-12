@@ -19,15 +19,6 @@ class Launcher:
 
         self.indev = Indev()
 
-        self._indev_drv = lv.indev_create()
-        self._indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
-        self._indev_drv.set_read_cb(self.indev.read_buttons)
-        self._indev_drv.set_display(lv.display_get_default())
-        self._grp = lv.group_create()
-        self._grp.set_default()
-        self._indev_drv.set_group(self._grp)
-        self._indev_drv.enable(True)
-
     async def lvgl_tick(self):
         while self.running:
             # sleep_ms can't handle too big values, so we limit it to 40 ms, which equals 25 fps
