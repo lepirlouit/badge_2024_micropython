@@ -28,6 +28,17 @@ class Indev:
         
         self.assign_buttons()
 
+        indev_drv = lv.indev_create()
+        indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
+        indev_drv.set_read_cb(self.read_buttons)
+        indev_drv.set_display(lv.display_get_default())
+        self._grp = lv.group_create()
+        self._grp.set_default()
+        indev_drv.set_group(self._grp)
+        indev_drv.enable(True)
+
+        self._indev_drv = indev_drv
+
 
     def assign_buttons(self):
         if 'a' in buttons:
