@@ -3,6 +3,7 @@ import lvgl_esp32
 import lvgl as lv
 
 from fri3d.badge.display import display
+from fri3d.indev import read_buttons
 from fri3d.splash import Splash
 
 from .log import logger
@@ -15,6 +16,15 @@ class Launcher:
 
         self._wrapper = lvgl_esp32.Wrapper(display)
         self._wrapper.init()
+
+        self._indev_drv = lv.indev_create()
+        self._indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
+        self._indev_drv.set_read_cb(read_buttons)
+        self._indev_drv.set_display(lv.display_get_default())
+        self._grp = lv.group_create()
+        self._grp.set_default()
+        self._indev_drv.set_group(self._grp)
+        self._indev_drv.enable(True)
 
     async def lvgl_tick(self):
         while self.running:

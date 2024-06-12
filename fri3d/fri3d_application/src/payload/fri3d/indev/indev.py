@@ -1,7 +1,7 @@
 import lvgl as lv
 
-from fri3d.badge import buttons
-from fri3d.badge import joystick
+from fri3d.badge.buttons import buttons
+from fri3d.badge.joystick import joystick
 
 from .log import logger
 
