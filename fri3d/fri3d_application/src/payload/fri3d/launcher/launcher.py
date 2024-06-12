@@ -19,8 +19,6 @@ class Launcher:
 
         self.indev = Indev()
 
-
-
     async def lvgl_tick(self):
         while self.running:
             # sleep_ms can't handle too big values, so we limit it to 40 ms, which equals 25 fps

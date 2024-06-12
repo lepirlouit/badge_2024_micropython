@@ -109,7 +109,7 @@ class Indev:
         if self.last_key_pressed is not None:
             if self.last_key_pressed not in keys_pressed:
                 # last key released
-                # logger.debug(f"released {last_key_pressed}")
+                logger.debug(f"released {self.last_key_pressed}")
 
                 data.key = self.last_key_pressed
                 data.state = lv.INDEV_STATE.RELEASED
@@ -130,7 +130,7 @@ class Indev:
                 # can only send 1 key pressed to lvgl, send first
                 key_pressed = keys_pressed.pop(0)
 
-                # logger.debug(f"pressed {key_pressed}")
+                logger.debug(f"pressed {key_pressed}")
 
                 data.key = key_pressed
                 data.state = lv.INDEV_STATE.PRESSED
