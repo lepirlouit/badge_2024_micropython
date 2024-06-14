@@ -28,9 +28,13 @@ class Indev:
         
         self.assign_buttons()
 
+        # Create references to bound methods beforehand
+        # http://docs.micropython.org/en/latest/pyboard/library/micropython.html#micropython.schedule
+        self._read_buttons = self.read_buttons
+
         indev_drv = lv.indev_create()
         indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
-        indev_drv.set_read_cb(self.read_buttons)
+        indev_drv.set_read_cb(self._read_buttons)
         indev_drv.set_display(lv.display_get_default())
         self._grp = lv.group_create()
         self._grp.set_default()
