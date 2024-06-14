@@ -1,15 +1,20 @@
-joystick = {}
+from fri3d.badge.hardware import hardware_capabilities
+from fri3d.utils.joystick_axis import JoystickAxis
 
-try:
-    from fri3d.badge.hardware import hardware_joystick
 
-    from .joystick_axis import JoystickAxis
+class Joystick:
+    def __init__(self):
+        self.x = None
+        self.y = None
 
-    joystick['x'] = JoystickAxis(hardware_joystick.pinout.pin_joystick_x, dead_val=150)
-    joystick['x'].init()
+        if hardware_capabilities.joystick:
+            from fri3d.badge.hardware import hardware_joystick
 
-    joystick['y'] = JoystickAxis(hardware_joystick.pinout.pin_joystick_y, dead_val=150)
-    joystick['y'].init()
+            self.x =JoystickAxis(hardware_joystick.pinout.pin_joystick_x, dead_val=150)
+            self.x.init()
 
-except ImportError:
-    pass
+            self.y = JoystickAxis(hardware_joystick.pinout.pin_joystick_y, dead_val=150)
+            self.y.init()
+
+
+joystick = Joystick()

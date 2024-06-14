@@ -1,11 +1,11 @@
 from micropython import const
-from machine import Pin
+from fri3d.badge.hardware.pin import HardwarePinInput
 
 
 class HardwarePinout:
     class PinoutLEDS:
         def __init__(self):
-            self.pin = 12
+            self.pin = const(12)
 
     class PinoutSPI:
         def __init__(self):
@@ -24,16 +24,14 @@ class HardwarePinout:
             self.gpio1 = leds.pin
             self.gpio2 = const(13)
 
-    class PinoutButtons:
+    class PinoutOnboardButtons:
         def __init__(self):
-            self.pin_buttons = {
-                'a': Pin(39, Pin.IN, Pin.PULL_UP),
-                'b': Pin(40, Pin.IN, Pin.PULL_UP),
-                'x': Pin(38, Pin.IN, Pin.PULL_UP),
-                'y': Pin(41, Pin.IN, Pin.PULL_UP),
-                'menu': Pin(45, Pin.IN, Pin.PULL_UP),
-                'start': Pin(0, Pin.IN)  # has external pullup
-            }
+            self.pin_a = HardwarePinInput(const(39), True)
+            self.pin_b = HardwarePinInput(const(40), True)
+            self.pin_x = HardwarePinInput(const(38), True)
+            self.pin_y = HardwarePinInput(const(41), True)
+            self.pin_menu = HardwarePinInput(const(45), True)
+            self.pin_start = HardwarePinInput(const(0), False)
 
     class PinoutJoystick:
         def __init__(self):
@@ -45,12 +43,8 @@ class HardwarePinout:
         self.pinout_spi = self.PinoutSPI()
         self.pinout_display = self.PinoutDisplay()
         self.pinout_sao = self.PinoutSAO(self.pinout_leds)
-        self.pinout_buttons = self.PinoutButtons()
+        self.pinout_onboard_buttons = self.PinoutOnboardButtons()
         self.pinout_joystick = self.PinoutJoystick()
 
-
-class HardwareCapabilities:
-    def __init__(self):
-        self.has_joystick = True
 
 hardware_pinout = HardwarePinout()

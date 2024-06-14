@@ -1,6 +1,7 @@
 import lvgl as lv
 
 from fri3d.badge.buttons import buttons
+from fri3d.badge.capabilities import capabilities
 from fri3d.badge.joystick import joystick
 
 from .log import logger
@@ -26,8 +27,6 @@ class Indev:
         # remember the last key pressed reported to lvgl
         self.last_key_pressed = None
         
-        self.assign_buttons()
-
         indev_drv = lv.indev_create()
         indev_drv.set_type(lv.INDEV_TYPE.KEYPAD)
         indev_drv.set_read_cb(self.read_buttons)
@@ -39,72 +38,41 @@ class Indev:
 
         self._indev_drv = indev_drv
 
-
-    def assign_buttons(self):
-        if 'a' in buttons:
-            self.button_enter = buttons['a']
-
-        if 'b' in buttons:
-            self.button_esc = buttons['b']
-
-        if 'x' in buttons:
-            self.button_next = buttons['x']
-        elif 'p0' in buttons:
-            self.button_next = buttons['p0']
-
-        if 'y' in buttons:
-            self.button_prev = buttons['y']
-        if 'p1' in buttons:
-            self.button_prev = buttons['p1']
-
-        if 'menu' in buttons:
-            self.button_home = buttons['menu']
-        elif 'select' in buttons:
-            self.button_home = buttons['select']
-
-        if 'start' in buttons:
-            self.button_end = buttons['start']
-
-        self.analog_joystick = True if 'x' in joystick and 'y' in joystick else False
-
     def read_buttons(self, drv, data):
         keys_pressed = []
 
-        if self.button_enter.value():
+        if buttons.confirm.value():
             keys_pressed.append(lv.KEY.ENTER)
-        if self.button_esc.value():
+        if buttons.escape.value():
             keys_pressed.append(lv.KEY.ESC)
-        if self.button_next.value():
+        if buttons.next.value():
             keys_pressed.append(lv.KEY.NEXT)
-        if self.button_prev.value():
+        if buttons.previous.value():
             keys_pressed.append(lv.KEY.PREV)
-        if self.button_home.value():
+        if buttons.home.value():
             keys_pressed.append(lv.KEY.HOME)
-        if self.button_end.value():
-            keys_pressed.append(lv.KEY.END)
 
-        if self.analog_joystick:
-            j_x = joystick['x'].read()
+        if capabilities.joystick:
+            j_x = joystick.x.read()
             if j_x > 0:
                 keys_pressed.append(lv.KEY.RIGHT)
             if j_x < 0:
                 keys_pressed.append(lv.KEY.LEFT)
 
-            j_y = joystick['y'].read()
+            j_y = joystick.y.read()
             if j_y > 0:
                 keys_pressed.append(lv.KEY.UP)
             if j_y < 0:
                 keys_pressed.append(lv.KEY.DOWN)
         else:
-            if buttons['up'].value():
+            if buttons.up and buttons.up.value():
                 keys_pressed.append(lv.KEY.UP)
-            if buttons['left'].value():
+            if buttons.left and buttons.left.value():
                 keys_pressed.append(lv.KEY.LEFT)
-            if buttons['down'].value():
+            if buttons.down and buttons.down.value():
                 keys_pressed.append(lv.KEY.DOWN)
-            if buttons['right'].value():
+            if buttons.right and buttons.right.value():
                 keys_pressed.append(lv.KEY.RIGHT)
-
 
         if self.last_key_pressed is not None:
             if self.last_key_pressed not in keys_pressed:

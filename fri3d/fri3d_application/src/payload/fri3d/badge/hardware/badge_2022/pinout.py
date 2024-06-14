@@ -1,11 +1,11 @@
 from micropython import const
-from machine import Pin
+from fri3d.badge.hardware.pin import HardwarePinInput
 
 
 class HardwarePinout:
     class PinoutLEDS:
         def __init__(self):
-            self.pin = 2
+            self.pin = const(2)
 
     class PinoutSPI:
         def __init__(self):
@@ -19,39 +19,50 @@ class HardwarePinout:
             self.pin_dc = const(33)
             self.pin_cs = const(5)
 
-    class PinoutButtons:
+    class PinoutOnboardButtons:
         def __init__(self):
-            self.pin_buttons = {
-                'boot': Pin(0, Pin.IN)  # has external pullup
-            }
+            self.pin_boot = HardwarePinInput(const(0), False)
 
     class PinoutSAO:
         def __init__(self, leds):
             self.gpio1 = leds.pin
             self.gpio2 = const(13)
 
-    class PinoutGameon:
+    class PinoutGameOn:
+        class PinoutButtons:
+            def __init__(self):
+                self.pin_a = HardwarePinInput(13, True)
+                self.pin_b = HardwarePinInput(12, True)
+                self.pin_start = HardwarePinInput(32, True)
+                self.pin_select = HardwarePinInput(36, True)
+                self.pin_p0 = HardwarePinInput(27, True)
+                self.pin_p1 = HardwarePinInput(14, True)
+                self.pin_up = HardwarePinInput(39, True)
+                self.pin_left = HardwarePinInput(26, True)
+                self.pin_down = HardwarePinInput(15, True)
+                self.pin_right = HardwarePinInput(0, False)
+                self.pin_p3 = HardwarePinInput(34, True)
+
+        class PinoutSpeaker:
+            def __init__(self):
+                self.pin = const(25)
+
+        class PinoutSDCard:
+            def __init__(self):
+                self.pin_cs = const(4)
+
         def __init__(self):
-            self.pin_buttons = {
-                "a": Pin(13, Pin.IN, Pin.PULL_UP),
-                "b": Pin(12, Pin.IN, Pin.PULL_UP),
-                "start": Pin(32, Pin.IN, Pin.PULL_UP),
-                "select": Pin(36, Pin.IN, Pin.PULL_UP),
-                "p0": Pin(27, Pin.IN, Pin.PULL_UP),
-                "p1": Pin(14, Pin.IN, Pin.PULL_UP),
-                "up": Pin(39, Pin.IN, Pin.PULL_UP),
-                "left": Pin(26, Pin.IN, Pin.PULL_UP),
-                "down": Pin(15, Pin.IN, Pin.PULL_UP),
-                "right": Pin(0, Pin.IN),  # has external pullup
-                "p3": Pin(34, Pin.IN, Pin.PULL_UP)
-            }
+            self.pinout_buttons = self.PinoutButtons()
+            self.pinout_speaker = self.PinoutSpeaker()
+            self.pinout_sd_card = self.PinoutSDCard()
 
     def __init__(self):
         self.pinout_leds = self.PinoutLEDS()
         self.pinout_spi = self.PinoutSPI()
         self.pinout_display = self.PinoutDisplay()
-        self.pinout_buttons = self.PinoutButtons()
+        self.pinout_onboard_buttons = self.PinoutOnboardButtons()
         self.pinout_sao = self.PinoutSAO(self.pinout_leds)
-        self.pinout_gameon = self.PinoutGameon()
+        self.pinout_gameon = self.PinoutGameOn()
+
 
 hardware_pinout = HardwarePinout()

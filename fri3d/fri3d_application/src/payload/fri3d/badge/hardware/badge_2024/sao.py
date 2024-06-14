@@ -1,9 +1,9 @@
 from .pinout import hardware_pinout
 
 
-class HardwareSao:
+class HardwareSAO:
     def __init__(self):
         self.pinout = hardware_pinout.pinout_sao
 
 
-hardware_sao = HardwareSao()
+hardware_sao = HardwareSAO()
