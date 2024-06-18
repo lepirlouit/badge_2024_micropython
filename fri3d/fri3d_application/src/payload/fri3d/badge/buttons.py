@@ -43,6 +43,7 @@ class Buttons:
         self.confirm = None
         self.escape = None
         self.home = None
+        self.end = None
 
         if hardware_capabilities.onboard_buttons:
             from fri3d.badge.hardware import hardware_onboard_buttons
@@ -73,5 +74,8 @@ class Buttons:
             self.home = self.menu
         elif self.select:
             self.home = self.select
+
+        if self.start:
+            self.end = self.start
 
 buttons = Buttons()
