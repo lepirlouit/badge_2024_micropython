@@ -55,6 +55,8 @@ class Indev:
             keys_pressed.append(lv.KEY.PREV)
         if buttons.home.value():
             keys_pressed.append(lv.KEY.HOME)
+        if buttons.end.value():
+            keys_pressed.append(lv.KEY.END)
 
         if capabilities.joystick:
             j_x = joystick.x.read()
