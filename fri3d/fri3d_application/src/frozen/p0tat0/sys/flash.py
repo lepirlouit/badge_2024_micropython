@@ -56,19 +56,14 @@ def init_internal_flash():
     os.chdir('/')
     entries = os.listdir()
 
-    main_missing = 'main.py' not in entries
-    if main_missing:
-        _logger.info("main.py not found, restoring")
+    missing = []
 
-    fri3d_missing = 'fri3d' not in entries
-    if fri3d_missing:
-        _logger.info("fri3d package not found, restoring")
+    for item in ['main.py', 'fri3d', 'user', 'examples']:
+        if item not in entries:
+            _logger.info(f"{item} not found, restoring")
+            missing.append(item)
 
-    user_missing = 'user' not in entries
-    if user_missing:
-        _logger.info("user package not found, restoring")
-
-    if main_missing or fri3d_missing or user_missing:
+    if len(missing) > 0:
         compressed_data = application_data()
 
         _logger.info("Opening archive")
@@ -77,9 +72,9 @@ def init_internal_flash():
 
             _logger.info("Extracting files")
             for tar_item in tar:
-                if (fri3d_missing and tar_item.name.startswith('fri3d')) or (
-                        user_missing and tar_item.name.startswith('user')) or (
-                        main_missing and tar_item.name == 'main.py'):
+                start = tar_item.name.split('/',1)[0]
+
+                if start in missing:
                     if tar_item.type == tarfile.DIRTYPE:
                         _logger.debug(f"Creating `{tar_item.name}`")
                         os.mkdir(tar_item.name.rstrip('/'))

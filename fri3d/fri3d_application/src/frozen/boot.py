@@ -11,7 +11,9 @@ from p0tat0.sys import flash, dev_mode
 
 
 def check_dev_mode():
-    repl_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_UP)
+    from fri3d.badge.hardware import hardware_sao
+
+    repl_pin = machine.Pin(hardware_sao.pinout.gpio2, machine.Pin.IN, machine.Pin.PULL_UP)
 
     if repl_pin.value() == 0:
         logging.info("Detected REPL pin active, activating dev mode.")

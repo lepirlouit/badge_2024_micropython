@@ -3,6 +3,7 @@ import lvgl_esp32
 import lvgl as lv
 
 from fri3d.badge.display import display
+from fri3d.indev.indev import Indev
 from fri3d.splash import Splash
 
 from .log import logger
@@ -15,6 +16,8 @@ class Launcher:
 
         self._wrapper = lvgl_esp32.Wrapper(display)
         self._wrapper.init()
+
+        self.indev = Indev()
 
     async def lvgl_tick(self):
         while self.running:
