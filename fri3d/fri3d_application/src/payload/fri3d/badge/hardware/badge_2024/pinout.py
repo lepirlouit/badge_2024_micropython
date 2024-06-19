@@ -3,6 +3,22 @@ from fri3d.badge.hardware.pin import HardwarePinInput
 
 
 class HardwarePinout:
+    class PinoutUART:
+        def __init__(self):
+            self.tx = const(43)
+            self.rx = const(44)
+
+    class PinoutI2S:
+        def __init__(self):
+            self.sck = const(2)
+            self.ws = const(47)
+            self.sd = const(16)
+
+    class PinoutI2C:
+        def __init__(self):
+            self.sda = const(9)
+            self.scl = const(18)
+
     class PinoutLEDS:
         def __init__(self):
             self.pin = const(12)
@@ -43,6 +59,9 @@ class HardwarePinout:
             self.pin_buzzer = const(46)
 
     def __init__(self):
+        self.pinout_uart = self.PinoutUART()
+        self.pinout_i2s = self.PinoutI2S()
+        self.pinout_i2c = self.PinoutI2C()
         self.pinout_leds = self.PinoutLEDS()
         self.pinout_spi = self.PinoutSPI()
         self.pinout_display = self.PinoutDisplay()
@@ -50,6 +69,7 @@ class HardwarePinout:
         self.pinout_onboard_buttons = self.PinoutOnboardButtons()
         self.pinout_joystick = self.PinoutJoystick()
         self.pinout_buzzer = self.PinoutBuzzer()
+
 
 
 hardware_pinout = HardwarePinout()
