@@ -10,3 +10,4 @@ from .spi import hardware_spi
 from .i2c import hardware_i2c
 from .i2s import hardware_i2s
 from .uart import hardware_uart
+from .communicator import hardware_communicator

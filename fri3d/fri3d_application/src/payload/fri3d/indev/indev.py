@@ -1,11 +1,42 @@
 import lvgl as lv
+from micropython import const
 
 from fri3d.badge.buttons import buttons
 from fri3d.badge.capabilities import capabilities
 from fri3d.badge.joystick import joystick
+from fri3d.badge.communicator import communicator
 
 from .log import logger
 
+HID_KEY_ENTER = const(0x28)
+HID_KEY_ESC = const(0x29)
+HID_KEY_BACKSPACE = const(0x2a)
+HID_KEY_DELETE = const(0x4c)
+HID_KEY_RIGHT = const(0x4f)
+HID_KEY_LEFT = const(0x50)
+HID_KEY_DOWN = const(0x51)
+HID_KEY_UP = const(0x52)
+HID_KEY_HOME = const(0x4a)
+HID_KEY_END = const(0x4d)
+HID_KEY_PAGEUP = const(0x4b)
+HID_KEY_PAGEDOWN = const(0x4e)
+HID_KEY_TAB = const(0x2b)
+
+KEYMAP = {
+    HID_KEY_ENTER: lv.KEY.ENTER,
+    HID_KEY_ESC: lv.KEY.ESC,
+    HID_KEY_BACKSPACE: lv.KEY.BACKSPACE,
+    HID_KEY_DELETE: lv.KEY.DEL,
+    HID_KEY_RIGHT: lv.KEY.RIGHT,
+    HID_KEY_LEFT: lv.KEY.LEFT,
+    HID_KEY_DOWN: lv.KEY.DOWN,
+    HID_KEY_UP: lv.KEY.UP,
+    HID_KEY_HOME: lv.KEY.HOME,
+    HID_KEY_END: lv.KEY.END,
+    HID_KEY_PAGEUP: lv.KEY.NEXT,
+    HID_KEY_PAGEDOWN: lv.KEY.PREV,
+    HID_KEY_TAB: lv.KEY.NEXT,
+}
 
 class Indev:
     """
@@ -23,10 +54,10 @@ class Indev:
     JOY_RIGHT     : LV_KEY_RIGHT
     """
     def __init__(self) -> None:
-        
+
         # remember the last key pressed reported to lvgl
         self.last_key_pressed = None
-        
+
         # Create references to bound methods beforehand
         # http://docs.micropython.org/en/latest/pyboard/library/micropython.html#micropython.schedule
         self._read_buttons = self.read_buttons
@@ -79,6 +110,10 @@ class Indev:
                 keys_pressed.append(lv.KEY.DOWN)
             if buttons.right and buttons.right.value():
                 keys_pressed.append(lv.KEY.RIGHT)
+
+        key = communicator.get_first_key()
+        if key and (key in KEYMAP):
+            keys_pressed.append(KEYMAP[key])
 
         if self.last_key_pressed is not None:
             if self.last_key_pressed not in keys_pressed:
