@@ -3,6 +3,6 @@
   "cls": "Launcher",
   "hidden": true,
   "config": {
-    "splash": "fri3d.apps.settings"
+    "splash": "fri3d.apps.splash"
   }
 }
