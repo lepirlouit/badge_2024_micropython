@@ -1,6 +1,5 @@
 from typing import Union, Final
 
-
 TYPE_I8: Final[int] = 0x11
 TYPE_U8: Final[int] = 0x01
 TYPE_I16: Final[int] = 0x12
@@ -15,7 +14,6 @@ TYPE_FLOAT: Final[int] = 0xFE
 
 
 class NVS:
-
     def __init__(self, name: str, /):
         """
         Constructor
@@ -35,7 +33,7 @@ class NVS:
         """
         ...
 
-    def get(self, type: int, key: str) ->  Union[int, float, str, bytes]:
+    def get(self, type: int, key: str) -> Union[int, float, str, bytes]:
         """
         Gets stored data
 
