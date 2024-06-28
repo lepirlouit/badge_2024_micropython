@@ -1,4 +1,5 @@
 from machine import I2C, Pin
+
 from fri3d.badge.hardware import hardware_i2c
 
 

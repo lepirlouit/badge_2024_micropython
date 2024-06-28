@@ -1,4 +1,5 @@
 from micropython import const
+
 from .pinout import hardware_pinout
 
 

@@ -1,10 +1,11 @@
 class HardwareCapabilities:
     def __init__(self):
+        self.communicator = True
         self.game_on = False
-        self.joystick = True
-        self.onboard_buttons = True
         self.i2c = True
         self.i2s = True
+        self.joystick = True
+        self.onboard_buttons = True
         self.uart = True
 
 
