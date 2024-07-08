@@ -40,7 +40,7 @@ def _create_flash_args_content_2022():
 
 
 def _create_flash_args_content_2024():
-    return """--before default_reset --after no_reset --chip esp32s3  write_flash --flash_mode dio --flash_size 16MB --flash_freq 80m 
+    return """--before default_reset --after hard_reset --chip esp32s3  write_flash --flash_mode dio --flash_size 16MB --flash_freq 80m 
 0x0 bootloader.bin
 0x8000 partition-table.bin
 0x1d000 ota_data_initial.bin
