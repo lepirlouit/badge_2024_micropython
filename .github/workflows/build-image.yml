@@ -1,14 +1,91 @@
-name: Build Release Images
+name: Build Release Image
 on:
   workflow_dispatch:
     inputs:
       tag:
         required: true
         description: Tag to build for
+  push:
+    tags:
+      - '*'
 
 jobs:
-  build_fox:
+  prepare:
+    name: Select the tag to build for and create Draft release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
-      - run: echo "Starting automatic release build"
-        
+      - name: Set tag
+        id: tag
+        run: |
+          if [[ "${{ github.event_name }}" != "push" ]]; then
+            tag="${{ github.event.inputs.tag }}"
+          else
+            tag=$(basename "${{ github.ref }}")
+          fi
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+      - name: Create GitHub Draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          body="Pre-release for @${{ steps.tag.outputs.tag }}"
+          gh release create --draft "$tag" --title "$tag-pre" --notes "$body"
+
+  build_fox:
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+      - name: esp-idf build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.2
+          target: esp32s3
+          command: export BOARD=FRI3D_BADGE_2024 && make -C mpy-cross && cd ports/esp32 && make submodules && make
+      - name: Upload binaries to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cd ports/esp32/build-FRI3D_BADGE_2024
+          sudo chown -R $(whoami) .
+          mv micropython.bin micropython_fox.bin
+          gh release upload "${{ needs.prepare.outputs.tag }}" \
+            "micropython_fox.bin"
+
+  build_octopus:
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+      - name: esp-idf build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.2
+          target: esp32
+          command: export BOARD=FRI3D_BADGE_2022 && make -C mpy-cross && cd ports/esp32 && make submodules && make
+      - name: Upload binaries to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cd ports/esp32/build-FRI3D_BADGE_2022
+          sudo chown -R $(whoami) .
+          mv micropython.bin micropython_octopus.bin
+          gh release upload "${{ needs.prepare.outputs.tag }}" \
+            "micropython_octopus.bin"
